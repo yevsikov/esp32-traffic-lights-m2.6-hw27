@@ -108,6 +108,14 @@ void updateButton(unsigned long now) {
   }
 }
 
+void updateEmergencyMode(unsigned long now) {
+  if ((now - emergencyToggledAt) >= EMERGENCY_BLINK_MS) {
+    emergencyToggledAt = now;
+    emergencyYellowOn = !emergencyYellowOn;
+    setLeds(false, emergencyYellowOn, false);
+  }
+}
+
 void setup() {
   Serial.begin(BAUDRATE);
 
