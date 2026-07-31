@@ -45,6 +45,12 @@ bool lastButtonSample = LOW;
 bool stableButtonState = LOW;
 unsigned long buttonLastChangedAt = 0;
 
+void setLeds(bool red, bool yellow, bool green) {
+  digitalWrite(LED_RED_PIN, red ? HIGH : LOW);
+  digitalWrite(LED_YELLOW_PIN, yellow ? HIGH : LOW);
+  digitalWrite(LED_GREEN_PIN, green ? HIGH : LOW);
+}
+
 
 void setup() {
   Serial.begin(BAUDRATE);
