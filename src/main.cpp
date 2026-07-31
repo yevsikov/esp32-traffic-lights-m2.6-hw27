@@ -108,6 +108,47 @@ void updateButton(unsigned long now) {
   }
 }
 
+void updateNormalMode(unsigned long now) {
+  switch (normalState) {
+    case NormalState::Red:
+      if ((now - stateStartedAt) >= RED_MS) {
+        enterNormalState(NormalState::RedYellow, now);
+      }
+      break;
+
+    case NormalState::RedYellow:
+      if ((now - stateStartedAt) >= RED_YELLOW_MS) {
+        enterNormalState(NormalState::Green, now);
+      }
+      break;
+
+    case NormalState::Green:
+      if ((now - stateStartedAt) >= GREEN_MS) {
+        enterNormalState(NormalState::GreenBlink, now);
+      }
+      break;
+
+    case NormalState::GreenBlink:
+      if ((now - greenBlinkToggledAt) >= GREEN_BLINK_TOGGLE_MS) {
+        greenBlinkToggledAt = now;
+        greenBlinkLedOn = !greenBlinkLedOn;
+        setLeds(false, false, greenBlinkLedOn);
+        greenBlinkTogglesDone++;
+
+        if (greenBlinkTogglesDone >= GREEN_BLINK_CYCLES * 2) {
+          enterNormalState(NormalState::Yellow, now);
+        }
+      }
+      break;
+
+    case NormalState::Yellow:
+      if ((now - stateStartedAt) >= YELLOW_MS) {
+        enterNormalState(NormalState::Red, now);
+      }
+      break;
+  }
+}
+
 void updateEmergencyMode(unsigned long now) {
   if ((now - emergencyToggledAt) >= EMERGENCY_BLINK_MS) {
     emergencyToggledAt = now;
