@@ -51,6 +51,32 @@ void setLeds(bool red, bool yellow, bool green) {
   digitalWrite(LED_GREEN_PIN, green ? HIGH : LOW);
 }
 
+void enterNormalState(NormalState next, unsigned long now) {
+  normalState = next;
+  stateStartedAt = now;
+
+  switch (normalState) {
+    case NormalState::Red:
+      setLeds(true, false, false);
+      break;
+    case NormalState::RedYellow:
+      setLeds(true, true, false);
+      break;
+    case NormalState::Green:
+      setLeds(false, false, true);
+      break;
+    case NormalState::GreenBlink:
+      greenBlinkToggledAt = now;
+      greenBlinkTogglesDone = 0;
+      greenBlinkLedOn = true;
+      setLeds(false, false, true);
+      break;
+    case NormalState::Yellow:
+      setLeds(false, true, false);
+      break;
+  }
+}
+
 
 void setup() {
   Serial.begin(BAUDRATE);
