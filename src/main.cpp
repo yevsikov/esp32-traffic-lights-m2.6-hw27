@@ -89,6 +89,25 @@ void switchMode(Mode nextMode, unsigned long now) {
   }
 }
 
+void updateButton(unsigned long now) {
+  bool sample = digitalRead(BTN_PIN);
+
+  if (sample != lastButtonSample) {
+    lastButtonSample = sample;
+    buttonLastChangedAt = now;
+  }
+
+  if ((now - buttonLastChangedAt) >= BUTTON_DEBOUNCE_MS && sample != stableButtonState) {
+    stableButtonState = sample;
+
+    // External pulldown: pressed == HIGH
+    if (stableButtonState == HIGH) {
+      Mode next = (mode == Mode::Normal) ? Mode::Emergency : Mode::Normal;
+      switchMode(next, now);
+    }
+  }
+}
+
 void setup() {
   Serial.begin(BAUDRATE);
 
