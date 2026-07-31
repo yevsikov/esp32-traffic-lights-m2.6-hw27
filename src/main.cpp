@@ -77,6 +77,17 @@ void enterNormalState(NormalState next, unsigned long now) {
   }
 }
 
+void switchMode(Mode nextMode, unsigned long now) {
+  mode = nextMode;
+
+  if (mode == Mode::Normal) {
+    enterNormalState(NormalState::Red, now);
+  } else {
+    emergencyToggledAt = now;
+    emergencyYellowOn = true;
+    setLeds(false, true, false);
+  }
+}
 
 void setup() {
   Serial.begin(BAUDRATE);
