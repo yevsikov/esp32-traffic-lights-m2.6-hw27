@@ -19,6 +19,32 @@ enum class NormalState {
   Yellow,
 };
 
+// Timings in milliseconds
+constexpr unsigned long RED_MS = 5000;
+constexpr unsigned long RED_YELLOW_MS = 2000;
+constexpr unsigned long GREEN_MS = 7000;
+constexpr unsigned long GREEN_BLINK_TOGGLE_MS = 500;
+constexpr uint8_t GREEN_BLINK_CYCLES = 3;
+constexpr unsigned long YELLOW_MS = 1000;
+constexpr unsigned long EMERGENCY_BLINK_MS = 500;
+
+constexpr unsigned long BUTTON_DEBOUNCE_MS = 40;
+
+Mode mode = Mode::Normal;
+NormalState normalState = NormalState::Red;
+
+unsigned long stateStartedAt = 0;
+unsigned long emergencyToggledAt = 0;
+bool emergencyYellowOn = false;
+
+unsigned long greenBlinkToggledAt = 0;
+uint8_t greenBlinkTogglesDone = 0;
+bool greenBlinkLedOn = false;
+
+bool lastButtonSample = LOW;
+bool stableButtonState = LOW;
+unsigned long buttonLastChangedAt = 0;
+
 
 void setup() {
   Serial.begin(BAUDRATE);
