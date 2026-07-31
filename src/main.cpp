@@ -6,6 +6,19 @@
 #define BTN_PIN 8
 #define BAUDRATE 115200
 
+enum class Mode {
+  Normal,
+  Emergency,
+};
+
+enum class NormalState {
+  Red,
+  RedYellow,
+  Green,
+  GreenBlink,
+  Yellow,
+};
+
 
 void setup() {
   Serial.begin(BAUDRATE);
